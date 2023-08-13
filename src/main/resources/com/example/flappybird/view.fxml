@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="plane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#pressed" onMousePressed="#click" prefHeight="598.0" prefWidth="362.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.flappybird.Controller">
+   <children>
+      <ImageView fitHeight="598.0" fitWidth="383.0" layoutX="-8.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="C:\Users\King\IdeaProjects\FlappyBird\src\main\java\com\example\flappybird\background.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="birdImageView" fitHeight="36.0" fitWidth="46.0" layoutX="99.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="C:\Users\King\IdeaProjects\FlappyBird\src\main\java\com\example\flappybird\bird.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
