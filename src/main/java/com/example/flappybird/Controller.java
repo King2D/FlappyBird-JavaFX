@@ -6,9 +6,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.List;
@@ -23,10 +25,18 @@ public class Controller implements Initializable {
     @FXML
     private ImageView birdImageView;
 
+    @FXML
+    private Text scoreText;
+
+    @FXML
+    private Text gameOverText;
+
     private Bird bird;
     private Pipes pipes;
     private static final double PIPE_SPAWN_INTERVAL = 150;
     private double pipeSpawnTimer = 0;
+    private Score score;
+    private boolean passedPipes = false; // Tracks whether the bird has passed each pipe
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -35,6 +45,10 @@ public class Controller implements Initializable {
         bird = new Bird(birdImageView);
 
         pipes = new Pipes(plane);
+
+        score = new Score(scoreText);
+
+        gameOverText.setVisible(false);
 
         gameLoop = new AnimationTimer() {
             @Override
@@ -58,23 +72,28 @@ public class Controller implements Initializable {
             bird.fly();
         }
     }
+
     private void update() {
         bird.update();
 
         double xDelta = 2;
         pipes.movePipes(+xDelta); // Adjust the pipe movement speed as needed
 
-        if (bird.isDead(plane.getHeight()) || checkCollision()) { // Call the isDead method
-            resetBird();
-            pipes.getPipes().clear();
-            plane.getChildren().removeIf(node -> node instanceof Rectangle);
+        boolean collision = checkCollision();
+        if (bird.isDead(plane.getHeight()) || collision) {
+            showGameOver();
         }
-
+        if (checkPassedPipe()) {
+            passedPipes = true;
+            score.incrementScore();
+            updateScoreCount();
+        }
 
         pipeSpawnTimer += 0.7; // You might need to adjust this value based on your frame rate
         if (pipeSpawnTimer >= PIPE_SPAWN_INTERVAL) {
             pipes.createPipePair(plane.getWidth());
             pipeSpawnTimer = 0;
+            passedPipes = false;
         }
 
         pipes.removeOffscreenPipes();
@@ -86,21 +105,73 @@ public class Controller implements Initializable {
                 plane.getChildren().add(pipe);
             }
         }
+            scoreText.toFront();
+
     }
 
-    private boolean checkCollision(){
+    private boolean checkCollision() {
         List<Rectangle> pipeList = pipes.getPipes();
-        for (Rectangle pipe : pipeList){
-            if (Collision.collisionDetection(birdImageView, pipe)){
+        for (Rectangle pipe : pipeList) {
+            if (Collision.collisionDetection(birdImageView, pipe)) {
                 return true;
             }
         }
         return false;
     }
-    private void load(){
+
+    private boolean checkPassedPipe() {
+        double birdCenterX = birdImageView.getX() + birdImageView.getFitWidth() / 2;
+        List<Rectangle> pipeList = pipes.getPipes();
+        for (Rectangle pipe : pipeList) {
+            double pipeX = pipe.getX();
+            if (birdCenterX > pipeX && !passedPipes) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void updateScoreCount() {
+        int currentScore = score.getScore();
+        scoreText.setText("Score: " + currentScore);
+    }
+
+
+    @FXML
+        private void resetGame(KeyEvent event3) {
+        if (event3.getCode() == KeyCode.ESCAPE) {
+            resetBird();
+            pipes.getPipes().clear();
+            plane.getChildren().removeIf(node -> node instanceof Rectangle);
+            passedPipes = false;
+            scoreText.setVisible(true);
+            birdImageView.setVisible(true);
+            resetScore();
+        }
+    }
+
+    private void showGameOver() {
+        gameOverText.setVisible(true);
+        gameOverText.toFront();
+        scoreText.setVisible(false);
+        birdImageView.setVisible(false);
+    }
+
+    private void removeGameOver(){
+        gameOverText.setVisible(false);
+    }
+
+
+
+    private void resetScore() {
+        score.resetScore();
 
     }
-    private void resetBird(){
+
+    private void load() {
+    }
+
+    private void resetBird() {
         bird.reset();
     }
 }

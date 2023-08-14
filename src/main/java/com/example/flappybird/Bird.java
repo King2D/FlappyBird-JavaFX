@@ -12,7 +12,7 @@ public class Bird {
     }
 
     public void fly() {
-        int jumpHeight = 80;
+        int jumpHeight = 70;
         if (imageView.getLayoutY() + imageView.getY() <= jumpHeight) {
             moveBirdY(-(imageView.getLayoutY() + imageView.getY()));
             time = 0;

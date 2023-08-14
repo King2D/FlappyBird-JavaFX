@@ -3,6 +3,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="plane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#pressed" onMousePressed="#click" prefHeight="598.0" prefWidth="362.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.flappybird.Controller">
    <children>
@@ -16,5 +18,15 @@
             <Image url="C:\Users\King\IdeaProjects\FlappyBird\src\main\java\com\example\flappybird\bird.png" />
          </image>
       </ImageView>
+      <Text fx:id="scoreText" fill="RED" layoutX="178.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="166.79998779296875">
+         <font>
+            <Font name="System Italic" size="23.0" />
+         </font>
+      </Text>
+      <Text fx:id="gameOverText" fill="RED" layoutX="87.0" layoutY="187.0" onKeyPressed="#resetGame" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Over!" wrappingWidth="188.79998779296875">
+         <font>
+            <Font name="ROGFonts-Regular" size="23.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
