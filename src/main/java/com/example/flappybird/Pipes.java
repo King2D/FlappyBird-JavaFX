@@ -29,9 +29,11 @@ public class Pipes {
     public void createPipePair(double x) {
         int windowHeight = (int) gamePane.getHeight();
 
+        //height for lower and upper pipe
         int upperPipeHeight = random.nextInt(PIPE_HEIGHT_RANGE) + 50;
         int lowerPipeHeight = windowHeight - upperPipeHeight - PIPE_SPACING;
 
+       //set pipe dimensions
         Rectangle upperPipe = new Rectangle(x, 0, PIPE_WIDTH, upperPipeHeight);
         Rectangle lowerPipe = new Rectangle(x, windowHeight - lowerPipeHeight, PIPE_WIDTH, lowerPipeHeight);
 
@@ -40,23 +42,21 @@ public class Pipes {
 
         pipes.add(upperPipe);
         pipes.add(lowerPipe);
-
-
         gamePane.getChildren().addAll(upperPipe, lowerPipe);
     }
 
-    private void pipeColor(Rectangle pipe) {
+    private void pipeColor(Rectangle pipe) { //method for pipe colors
         pipe.setFill(PIPE_COLOR);
         pipe.setStroke(PIPE_OUTLINE_COLOR);
-        pipe.setStrokeWidth(3); // Outline thickness
+        pipe.setStrokeWidth(3); //outline
     }
-    public void movePipes(double speed) {
+    public void movePipes(double speed) { //move the pipe to the left towards the bid
         for (Rectangle pipe : pipes) {
             pipe.setX(pipe.getX() - speed);
         }
     }
 
-    public void removeOffscreenPipes() {
+    public void removeOffscreenPipes() { //remove all pipes that are off-screen to the left
         pipes.removeIf(pipe -> pipe.getX() + PIPE_WIDTH < 0);
         gamePane.getChildren().removeIf(node -> node instanceof Rectangle && ((Rectangle) node).getX() + PIPE_WIDTH < 0);
     }

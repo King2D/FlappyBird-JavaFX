@@ -6,12 +6,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -36,7 +34,7 @@ public class Controller implements Initializable {
     private static final double PIPE_SPAWN_INTERVAL = 150;
     private double pipeSpawnTimer = 0;
     private Score score;
-    private boolean passedPipes = false; // Tracks whether the bird has passed each pipe
+    private boolean passedPipes = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -76,12 +74,13 @@ public class Controller implements Initializable {
     private void update() {
         bird.update();
 
-        double xDelta = 2;
-        pipes.movePipes(+xDelta); // Adjust the pipe movement speed as needed
+        double xDelta = 2;  //pipe movement speed
+        pipes.movePipes(+xDelta);
 
         boolean collision = checkCollision();
         if (bird.isDead(plane.getHeight()) || collision) {
             showGameOver();
+            return;
         }
         if (checkPassedPipe()) {
             passedPipes = true;
@@ -89,7 +88,7 @@ public class Controller implements Initializable {
             updateScoreCount();
         }
 
-        pipeSpawnTimer += 0.7; // You might need to adjust this value based on your frame rate
+        pipeSpawnTimer += 0.9;  //.9 for 144fps
         if (pipeSpawnTimer >= PIPE_SPAWN_INTERVAL) {
             pipes.createPipePair(plane.getWidth());
             pipeSpawnTimer = 0;
@@ -98,7 +97,6 @@ public class Controller implements Initializable {
 
         pipes.removeOffscreenPipes();
 
-        // Add the following code to add pipes to the game scene
         List<Rectangle> pipeList = pipes.getPipes();
         for (Rectangle pipe : pipeList) {
             if (!plane.getChildren().contains(pipe)) {
@@ -132,10 +130,11 @@ public class Controller implements Initializable {
     }
 
     private void updateScoreCount() {
-        int currentScore = score.getScore();
-        scoreText.setText("Score: " + currentScore);
+        if (!bird.isDead(plane.getHeight())) {
+            int currentScore = score.getScore();
+            scoreText.setText("Score: " + currentScore);
+        }
     }
-
 
     @FXML
         private void resetGame(KeyEvent event3) {
@@ -146,6 +145,7 @@ public class Controller implements Initializable {
             passedPipes = false;
             scoreText.setVisible(true);
             birdImageView.setVisible(true);
+            gameOverText.setVisible(false);
             resetScore();
         }
     }
@@ -153,24 +153,15 @@ public class Controller implements Initializable {
     private void showGameOver() {
         gameOverText.setVisible(true);
         gameOverText.toFront();
-        scoreText.setVisible(false);
+        scoreText.setVisible(true);
         birdImageView.setVisible(false);
     }
-
-    private void removeGameOver(){
-        gameOverText.setVisible(false);
-    }
-
-
-
     private void resetScore() {
         score.resetScore();
 
     }
-
     private void load() {
     }
-
     private void resetBird() {
         bird.reset();
     }

@@ -24,7 +24,7 @@ public class Bird {
 
     public void update() {
         time++;
-        double yDelta = 0.02;
+        double yDelta = 0.02; //gravity or speed by which the bird falls (dependent to the framerate)
         moveBirdY(yDelta * time);
     }
 
@@ -32,12 +32,12 @@ public class Bird {
         imageView.setY(imageView.getY() + positionChange);
     }
 
-    public void reset() {
+    public void reset() { //reset bird's position)
         imageView.setY(0);
         imageView.setX(0);
         time = 0;
     }
-    public boolean isDead(double planeHeight) {
+    public boolean isDead(double planeHeight) { //check if the bird is on the ground, then the bird is dead
         double birdY = imageView.getLayoutY() + imageView.getY();
         return birdY >= planeHeight;
     }

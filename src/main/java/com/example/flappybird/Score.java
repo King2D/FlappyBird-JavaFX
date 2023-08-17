@@ -4,7 +4,7 @@ import javafx.scene.text.Text;
 
 public class Score {
 
-    private int score = -1;        // Initial score
+    private int score = 0;
     private final Text scoreText;       // Text element for displaying the score
 
     public Score(Text scoreText) {
@@ -21,11 +21,11 @@ public class Score {
         return score;
     }
     public void resetScore() {
-        score = -1; // Reset the score to zero
+        score = 0; // Reset the score to zero
         updateScoreText();
     }
 
     private void updateScoreText() {
-        scoreText.setText("Score: "); // Update the UI text with the current score
+        scoreText.setText("Score: ");
     }
 }
